@@ -32,6 +32,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
@@ -92,11 +93,17 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     private LinkedList<Pose2d> poseHistory;
 
-    private DcMotorEx leftFront, leftRear, rightRear, rightFront;
-    private List<DcMotorEx> motors;
-    private BNO055IMU imu;
+    protected DcMotorEx leftFront, leftRear, rightRear, rightFront;
+    protected List<DcMotorEx> motors;
+    protected BNO055IMU imu;
 
-    private VoltageSensor batteryVoltageSensor;
+    /*
+    Instantiate servos
+     */
+    protected Servo leftServo, rightServo;
+
+
+    protected VoltageSensor batteryVoltageSensor;
 
     private Pose2d lastPoseOnTurn;
 
