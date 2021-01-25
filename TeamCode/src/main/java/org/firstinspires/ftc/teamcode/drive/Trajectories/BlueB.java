@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.drive.ICEMecanumDrive;
 
 @Autonomous
-public class BlueC extends LinearOpMode {
+public class BlueB extends LinearOpMode {
        @Override
     public void runOpMode() {
            ICEMecanumDrive drive = new ICEMecanumDrive(hardwareMap);
@@ -18,21 +18,22 @@ public class BlueC extends LinearOpMode {
 
            drive.setPoseEstimate(startPose);
 
-           Trajectory targetZoneC = drive.trajectoryBuilder(startPose)
-               .splineTo(new Vector2d(58, 55), Math.toRadians(0))
+           Trajectory targetZoneB = drive.trajectoryBuilder(startPose)
+               .splineTo(new Vector2d(-45.0, 55.0), Math.toRadians(0))
+                   .splineTo(new Vector2d(34.0, 30.0), Math.toRadians(0))
                .build();
 
-           Trajectory cToGoal = drive.trajectoryBuilder(targetZoneC.end(),true)
+           Trajectory aToGoal = drive.trajectoryBuilder(targetZoneB.end(),true)
                    .splineTo(new Vector2d(-24,31), Math.toRadians(180))
                    .build();
 
-           Trajectory goalToC = drive.trajectoryBuilder(cToGoal.end())
-                   .splineTo(new Vector2d(58,45), Math.toRadians(270))
+           Trajectory goalToB = drive.trajectoryBuilder(aToGoal.end())
+                   .splineTo(new Vector2d(40,15), Math.toRadians(270))
                    .build();
 
-           Trajectory cToLine = drive.trajectoryBuilder(goalToC.end())
-                   .splineTo(new Vector2d(10,50), Math.toRadians(180))
-                   .build();
+              Trajectory bToLine = drive.trajectoryBuilder(goalToB.end())
+                      .splineTo(new Vector2d(10,15), Math.toRadians(180))
+                      .build();
 
 
 
@@ -40,14 +41,14 @@ public class BlueC extends LinearOpMode {
 
            if(isStopRequested()) return;
 
-           drive.followTrajectory(targetZoneC);
+           drive.followTrajectory(targetZoneB);
            //Deploy Wobble Goal by setting servo to open
            //Deploy Arm
-           drive.followTrajectory(cToGoal);
+           drive.followTrajectory(aToGoal);
            //Grab Goal by setting servo to close
-           drive.followTrajectory(goalToC);
+           drive.followTrajectory(goalToB);
            //Release Goal by setting servo to open
-           drive.followTrajectory(cToLine);
+           drive.followTrajectory(bToLine);
 
        }
 }
