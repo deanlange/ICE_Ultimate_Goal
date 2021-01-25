@@ -29,7 +29,6 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -44,23 +43,23 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_ACCEL;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_ANG_ACCEL;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_ANG_VEL;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_VEL;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MOTOR_VELO_PID;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.RUN_USING_ENCODER;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.TRACK_WIDTH;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.encoderTicksToInches;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kA;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kStatic;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
+import static org.firstinspires.ftc.teamcode.drive.ICEDriveConstants.MAX_ACCEL;
+import static org.firstinspires.ftc.teamcode.drive.ICEDriveConstants.MAX_ANG_ACCEL;
+import static org.firstinspires.ftc.teamcode.drive.ICEDriveConstants.MAX_ANG_VEL;
+import static org.firstinspires.ftc.teamcode.drive.ICEDriveConstants.MAX_VEL;
+import static org.firstinspires.ftc.teamcode.drive.ICEDriveConstants.MOTOR_VELO_PID;
+import static org.firstinspires.ftc.teamcode.drive.ICEDriveConstants.RUN_USING_ENCODER;
+import static org.firstinspires.ftc.teamcode.drive.ICEDriveConstants.TRACK_WIDTH;
+import static org.firstinspires.ftc.teamcode.drive.ICEDriveConstants.encoderTicksToInches;
+import static org.firstinspires.ftc.teamcode.drive.ICEDriveConstants.kA;
+import static org.firstinspires.ftc.teamcode.drive.ICEDriveConstants.kStatic;
+import static org.firstinspires.ftc.teamcode.drive.ICEDriveConstants.kV;
 
 /*
  * Simple mecanum drive hardware implementation for REV hardware.
  */
 @Config
-public class SampleMecanumDrive extends MecanumDrive {
+public class ICEMecanumDrive extends MecanumDrive {
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(8, 0, 0);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(8, 0, 0);
 
@@ -100,14 +99,14 @@ public class SampleMecanumDrive extends MecanumDrive {
     /*
     Instantiate servos
      */
-    protected Servo leftServo, rightServo;
+    protected Servo leftServo, rightServo, armServo;
 
 
     protected VoltageSensor batteryVoltageSensor;
 
     private Pose2d lastPoseOnTurn;
 
-    public SampleMecanumDrive(HardwareMap hardwareMap) {        super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
+    public ICEMecanumDrive(HardwareMap hardwareMap) {        super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
 
 
         dashboard = FtcDashboard.getInstance();
@@ -175,11 +174,20 @@ public class SampleMecanumDrive extends MecanumDrive {
         leftFront.setDirection(DcMotor.Direction.REVERSE);
         leftRear.setDirection(DcMotor.Direction.REVERSE);
 
+        // Define and initialize ALL installed servos.
+        leftServo  = hardwareMap.get(Servo.class, "leftServo");
+        rightServo = hardwareMap.get(Servo.class, "rightServo");
+        armServo = hardwareMap.get(Servo.class,"armServo");
+
         // if desired, use setLocalizer() to change the localization method
         // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
-        setLocalizer((new StandardTrackingWheelLocalizer(hardwareMap) ));
+        setLocalizer((new ICETrackingWheelLocalizer(hardwareMap) ));
     }
 
+
+/*
+ Original SampleMecanumDrive
+*/
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose) {
         return new TrajectoryBuilder(startPose, velConstraint, accelConstraint);
     }

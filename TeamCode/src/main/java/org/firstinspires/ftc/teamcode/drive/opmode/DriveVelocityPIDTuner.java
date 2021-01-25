@@ -9,19 +9,20 @@ import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
 import com.acmerobotics.roadrunner.profile.MotionState;
 import com.acmerobotics.roadrunner.util.NanoClock;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.RobotLog;
 
-import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.drive.ICEMecanumDrive;
 
 import java.util.List;
 
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_ACCEL;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_VEL;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MOTOR_VELO_PID;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.RUN_USING_ENCODER;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
+import static org.firstinspires.ftc.teamcode.drive.ICEDriveConstants.MAX_ACCEL;
+import static org.firstinspires.ftc.teamcode.drive.ICEDriveConstants.MAX_VEL;
+import static org.firstinspires.ftc.teamcode.drive.ICEDriveConstants.MOTOR_VELO_PID;
+import static org.firstinspires.ftc.teamcode.drive.ICEDriveConstants.RUN_USING_ENCODER;
+import static org.firstinspires.ftc.teamcode.drive.ICEDriveConstants.kV;
 
 /*
  * This routine is designed to tune the PID coefficients used by the REV Expansion Hubs for closed-
@@ -33,7 +34,7 @@ import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
  * connected, start the program, and your robot will begin moving forward and backward according to
  * a motion profile. Your job is to graph the velocity errors over time and adjust the PID
  * coefficients (note: the tuning variable will not appear until the op mode finishes initializing).
- * Once you've found a satisfactory set of gains, add them to the DriveConstants.java file under the
+ * Once you've found a satisfactory set of gains, add them to the ICEDriveConstants.java file under the
  * MOTOR_VELO_PID field.
  *
  * Recommended tuning process:
@@ -49,6 +50,8 @@ import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
  * Pressing A (on the Xbox and Logitech F310 gamepads, X on the PS4 Dualshock gamepad) will cede
  * control back to the tuning process.
  */
+@Disabled
+
 @Config
 @Autonomous(group = "drive")
 public class DriveVelocityPIDTuner extends LinearOpMode {
@@ -74,7 +77,7 @@ public class DriveVelocityPIDTuner extends LinearOpMode {
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        ICEMecanumDrive drive = new ICEMecanumDrive(hardwareMap);
 
         Mode mode = Mode.TUNING_MODE;
 

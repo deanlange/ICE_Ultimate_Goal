@@ -19,7 +19,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
  * and op modes themselves.
  */
 @Config
-public class DriveConstants {
+public class ICEDriveConstants {
 
     /*
     Initialize and instantiate vuforia variables

@@ -10,19 +10,20 @@ import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
 import com.acmerobotics.roadrunner.profile.MotionState;
 import com.acmerobotics.roadrunner.util.NanoClock;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.RobotLog;
 
-import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.drive.ICEMecanumDrive;
 
 import java.util.Objects;
 
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_ACCEL;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_VEL;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.RUN_USING_ENCODER;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kA;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kStatic;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
+import static org.firstinspires.ftc.teamcode.drive.ICEDriveConstants.MAX_ACCEL;
+import static org.firstinspires.ftc.teamcode.drive.ICEDriveConstants.MAX_VEL;
+import static org.firstinspires.ftc.teamcode.drive.ICEDriveConstants.RUN_USING_ENCODER;
+import static org.firstinspires.ftc.teamcode.drive.ICEDriveConstants.kA;
+import static org.firstinspires.ftc.teamcode.drive.ICEDriveConstants.kStatic;
+import static org.firstinspires.ftc.teamcode.drive.ICEDriveConstants.kV;
 
 /*
  * This routine is designed to tune the open-loop feedforward coefficients. Although it may seem unnecessary,
@@ -33,7 +34,7 @@ import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
  * you are using the Control Hub. Once you've successfully connected, start the program, and your
  * robot will begin moving forward and backward according to a motion profile. Your job is to graph
  * the velocity errors over time and adjust the feedforward coefficients. Once you've found a
- * satisfactory set of gains, add them to the appropriate fields in the DriveConstants.java file.
+ * satisfactory set of gains, add them to the appropriate fields in the ICEDriveConstants.java file.
  *
  * Pressing X (on the Xbox and Logitech F310 gamepads, square on the PS4 Dualshock gamepad) will
  * pause the tuning process and enter driver override, allowing the user to reset the position of
@@ -41,6 +42,8 @@ import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
  * Pressing A (on the Xbox and Logitech F310 gamepads, X on the PS4 Dualshock gamepad) will cede
  * control back to the tuning process.
  */
+@Disabled
+
 @Config
 @Autonomous(group = "drive")
 public class ManualFeedforwardTuner extends LinearOpMode {
@@ -48,7 +51,7 @@ public class ManualFeedforwardTuner extends LinearOpMode {
 
     private FtcDashboard dashboard = FtcDashboard.getInstance();
 
-    private SampleMecanumDrive drive;
+    private ICEMecanumDrive drive;
 
     enum Mode {
         DRIVER_MODE,
@@ -72,7 +75,7 @@ public class ManualFeedforwardTuner extends LinearOpMode {
 
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
-        drive = new SampleMecanumDrive(hardwareMap);
+        drive = new ICEMecanumDrive(hardwareMap);
 
         mode = Mode.TUNING_MODE;
 

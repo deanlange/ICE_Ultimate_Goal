@@ -6,15 +6,13 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-
-import static java.lang.Math.*;
+import org.firstinspires.ftc.teamcode.drive.ICEMecanumDrive;
 
 @Autonomous
-public class TargetZoneA extends LinearOpMode {
+public class BlueC extends LinearOpMode {
        @Override
     public void runOpMode() {
-           SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+           ICEMecanumDrive drive = new ICEMecanumDrive(hardwareMap);
 
            Pose2d startPose = new Pose2d(-62,55, Math.toRadians(0));
 
@@ -29,7 +27,7 @@ public class TargetZoneA extends LinearOpMode {
                    .build();
 
            Trajectory goalToA = drive.trajectoryBuilder(aToGoal.end())
-                   .splineTo(new Vector2d(10,50), Math.toRadians(0))
+                   .splineTo(new Vector2d(10,50), Math.toRadians(270))
                    .build();
 
 
