@@ -24,7 +24,7 @@ public class BlueB extends LinearOpMode {
                .build();
 
            Trajectory aToGoal = drive.trajectoryBuilder(targetZoneB.end(),true)
-                   .splineTo(new Vector2d(-24,31), Math.toRadians(180))
+                   .splineTo(new Vector2d(-30,31), Math.toRadians(180))
                    .build();
 
            Trajectory goalToB = drive.trajectoryBuilder(aToGoal.end())

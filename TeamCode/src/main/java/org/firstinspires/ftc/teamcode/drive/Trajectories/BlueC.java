@@ -23,7 +23,7 @@ public class BlueC extends LinearOpMode {
                .build();
 
            Trajectory cToGoal = drive.trajectoryBuilder(targetZoneC.end(),true)
-                   .splineTo(new Vector2d(-24,31), Math.toRadians(180))
+                   .splineTo(new Vector2d(-30,31), Math.toRadians(180))
                    .build();
 
            Trajectory goalToC = drive.trajectoryBuilder(cToGoal.end())

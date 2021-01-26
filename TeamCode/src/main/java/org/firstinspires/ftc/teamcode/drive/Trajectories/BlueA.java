@@ -23,7 +23,7 @@ public class BlueA extends LinearOpMode {
                .build();
 
            Trajectory aToGoal = drive.trajectoryBuilder(targetZoneA.end(),true)
-                   .splineTo(new Vector2d(-24,31), Math.toRadians(180))
+                   .splineTo(new Vector2d(-30,31), Math.toRadians(180))
                    .build();
 
            Trajectory goalToA = drive.trajectoryBuilder(aToGoal.end())
@@ -41,7 +41,7 @@ public class BlueA extends LinearOpMode {
            //Deploy Arm
            drive.followTrajectory(aToGoal);
            //Grab Goal by setting servo to close
-           //drive.followTrajectory(goalToA);
+           drive.followTrajectory(goalToA);
            //Release Goal by setting servo to open
 
        }
