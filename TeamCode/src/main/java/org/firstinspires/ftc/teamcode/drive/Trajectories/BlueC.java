@@ -34,19 +34,21 @@ public class BlueC extends LinearOpMode {
                    .splineTo(new Vector2d(10,50), Math.toRadians(180))
                    .build();
 
-
+           init();
+           
+           drive.grabGoal();
 
            waitForStart();
 
            if(isStopRequested()) return;
 
            drive.followTrajectory(targetZoneC);
-           //Deploy Wobble Goal by setting servo to open
+           drive.releaseGoal();//Deploy Wobble Goal by setting servo to open
            //Deploy Arm
            drive.followTrajectory(cToGoal);
-           //Grab Goal by setting servo to close
+           drive.grabGoal();//Grab Goal by setting servo to close
            drive.followTrajectory(goalToC);
-           //Release Goal by setting servo to open
+           drive.releaseGoal();//Release Goal by setting servo to open
            drive.followTrajectory(cToLine);
 
        }

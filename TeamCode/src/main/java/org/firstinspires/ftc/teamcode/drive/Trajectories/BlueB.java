@@ -36,18 +36,21 @@ public class BlueB extends LinearOpMode {
                       .build();
 
 
+           init();
+
+           drive.grabGoal();
 
            waitForStart();
 
            if(isStopRequested()) return;
 
            drive.followTrajectory(targetZoneB);
-           //Deploy Wobble Goal by setting servo to open
+           drive.releaseGoal();//Deploy Wobble Goal by setting servo to open
            //Deploy Arm
            drive.followTrajectory(aToGoal);
-           //Grab Goal by setting servo to close
+           drive.grabGoal();//Grab Goal by setting servo to close
            drive.followTrajectory(goalToB);
-           //Release Goal by setting servo to open
+           drive.releaseGoal();//Release Goal by setting servo to open
            drive.followTrajectory(bToLine);
 
        }

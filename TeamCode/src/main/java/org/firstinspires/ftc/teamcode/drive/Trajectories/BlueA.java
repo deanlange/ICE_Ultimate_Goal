@@ -5,11 +5,14 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.drive.ICEMecanumDrive;
 
 @Autonomous
 public class BlueA extends LinearOpMode {
+       protected Servo leftServo, rightServo, armServo;
+
        @Override
     public void runOpMode() {
            ICEMecanumDrive drive = new ICEMecanumDrive(hardwareMap);
@@ -30,19 +33,22 @@ public class BlueA extends LinearOpMode {
                    .splineTo(new Vector2d(10,50), Math.toRadians(270))
                    .build();
 
+           init();
 
+           drive.grabGoal();
 
            waitForStart();
 
            if(isStopRequested()) return;
 
            drive.followTrajectory(targetZoneA);
-           //Deploy Wobble Goal by setting servo to open
-           //Deploy Arm
+            drive.releaseGoal();//Deploy Wobble Goal by setting servo to open
+           sleep(500);
+              //Deploy Arm
            drive.followTrajectory(aToGoal);
-           //Grab Goal by setting servo to close
+           drive.grabGoal();//Grab Goal by setting servo to close
            drive.followTrajectory(goalToA);
-           //Release Goal by setting servo to open
+           drive.releaseGoal();//Release Goal by setting servo to open
 
        }
 }
