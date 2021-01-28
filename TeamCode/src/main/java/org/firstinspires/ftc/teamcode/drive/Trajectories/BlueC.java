@@ -49,7 +49,8 @@ public class BlueC extends LinearOpMode {
            drive.grabGoal();//Grab Goal by setting servo to close
            drive.followTrajectory(goalToC);
            drive.releaseGoal();//Release Goal by setting servo to open
-           drive.followTrajectory(cToLine);
+              sleep(500);
+              drive.followTrajectory(cToLine);
 
        }
 }

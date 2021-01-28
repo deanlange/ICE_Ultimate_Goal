@@ -383,13 +383,13 @@ public class ICEMecanumDrive extends MecanumDrive {
     }
     public void releaseGoal(){
         leftServo.setPosition(0);
-        rightServo.setPosition(0);
+        rightServo.setPosition(1);
         armServo.setPosition(0);
 
     }
     public void grabGoal(){
         leftServo.setPosition(.9);
-        rightServo.setPosition(1);
+        rightServo.setPosition(0);
         armServo.setPosition(1);
 
     }

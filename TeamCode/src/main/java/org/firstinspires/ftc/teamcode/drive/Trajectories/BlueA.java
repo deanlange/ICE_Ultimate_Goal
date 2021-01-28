@@ -49,6 +49,7 @@ public class BlueA extends LinearOpMode {
            drive.grabGoal();//Grab Goal by setting servo to close
            drive.followTrajectory(goalToA);
            drive.releaseGoal();//Release Goal by setting servo to open
+              sleep(500);
 
        }
 }

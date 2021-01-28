@@ -50,7 +50,8 @@ public class BlueB extends LinearOpMode {
            drive.followTrajectory(aToGoal);
            drive.grabGoal();//Grab Goal by setting servo to close
            drive.followTrajectory(goalToB);
-           drive.releaseGoal();//Release Goal by setting servo to open
+           drive.releaseGoal();
+              sleep(500);//Release Goal by setting servo to open
            drive.followTrajectory(bToLine);
 
        }
