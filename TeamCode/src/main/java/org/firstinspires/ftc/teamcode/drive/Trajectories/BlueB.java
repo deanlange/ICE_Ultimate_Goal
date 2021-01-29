@@ -21,14 +21,17 @@ public class BlueB extends LinearOpMode {
            Trajectory targetZoneB = drive.trajectoryBuilder(startPose)
                .splineTo(new Vector2d(-45.0, 55.0), Math.toRadians(0))
                    .splineTo(new Vector2d(34.0, 30.0), Math.toRadians(0))
-               .build();
+                   .addDisplacementMarker(drive::releaseGoal)
+                   .build();
 
            Trajectory aToGoal = drive.trajectoryBuilder(targetZoneB.end(),true)
-                   .splineTo(new Vector2d(-30,31), Math.toRadians(180))
+                   .splineTo(new Vector2d(-30,29), Math.toRadians(180))
+                   .addDisplacementMarker(drive::grabGoal)
                    .build();
 
            Trajectory goalToB = drive.trajectoryBuilder(aToGoal.end())
                    .splineTo(new Vector2d(40,15), Math.toRadians(270))
+                   .addDisplacementMarker(drive::releaseGoal)
                    .build();
 
               Trajectory bToLine = drive.trajectoryBuilder(goalToB.end())
@@ -38,7 +41,6 @@ public class BlueB extends LinearOpMode {
 
            init();
 
-           drive.grabGoal();
 
            waitForStart();
 
@@ -46,7 +48,9 @@ public class BlueB extends LinearOpMode {
 
            drive.followTrajectory(targetZoneB);
            drive.releaseGoal();//Deploy Wobble Goal by setting servo to open
-           //Deploy Arm
+              drive.arm(.5);
+              sleep(1000);
+              drive.stopArm();
            drive.followTrajectory(aToGoal);
            drive.grabGoal();//Grab Goal by setting servo to close
            drive.followTrajectory(goalToB);

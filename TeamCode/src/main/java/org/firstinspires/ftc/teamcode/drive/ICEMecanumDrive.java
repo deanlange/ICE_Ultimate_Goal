@@ -93,6 +93,7 @@ public class ICEMecanumDrive extends MecanumDrive {
     private LinkedList<Pose2d> poseHistory;
 
     protected DcMotorEx leftFront, leftRear, rightRear, rightFront;
+    protected DcMotorEx arm;
     protected List<DcMotorEx> motors;
     protected BNO055IMU imu;
 
@@ -151,6 +152,8 @@ public class ICEMecanumDrive extends MecanumDrive {
         leftRear = hardwareMap.get(DcMotorEx.class, "leftRear");
         rightRear = hardwareMap.get(DcMotorEx.class, "rightRear");
         rightFront = hardwareMap.get(DcMotorEx.class, "rightFront");
+        arm = hardwareMap.get(DcMotorEx.class, "arm");
+
 
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
@@ -384,14 +387,27 @@ public class ICEMecanumDrive extends MecanumDrive {
     public void releaseGoal(){
         leftServo.setPosition(0);
         rightServo.setPosition(1);
-        armServo.setPosition(0);
+        armServo.setPosition(1);
 
     }
     public void grabGoal(){
         leftServo.setPosition(.9);
         rightServo.setPosition(0);
-        armServo.setPosition(1);
+        armServo.setPosition(0);
 
+ }
+    public void arm (double power){
+        arm.setPower(power);
+    }
+    public void deployArm(){
+        arm.setPower(.5);
+
+    }
+    public void lowerArm(){
+        arm(.5);
+    }
+    public void stopArm(){
+        arm(0);
     }
 
     @NonNull
@@ -425,4 +441,6 @@ public class ICEMecanumDrive extends MecanumDrive {
     public double getRawExternalHeading() {
         return imu.getAngularOrientation().firstAngle;
     }
+
 }
+

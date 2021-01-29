@@ -22,34 +22,34 @@ public class BlueA extends LinearOpMode {
            drive.setPoseEstimate(startPose);
 
            Trajectory targetZoneA = drive.trajectoryBuilder(startPose)
-               .splineTo(new Vector2d(10, 55), Math.toRadians(0))
+                   .splineTo(new Vector2d(10, 55), Math.toRadians(0))
+              .addDisplacementMarker(drive::releaseGoal)
                .build();
 
            Trajectory aToGoal = drive.trajectoryBuilder(targetZoneA.end(),true)
-                   .splineTo(new Vector2d(-30,31), Math.toRadians(180))
+                   .splineTo(new Vector2d(-30,29), Math.toRadians(180))
+                   .addDisplacementMarker(drive::grabGoal)
                    .build();
 
            Trajectory goalToA = drive.trajectoryBuilder(aToGoal.end())
                    .splineTo(new Vector2d(10,50), Math.toRadians(270))
+                   .addDisplacementMarker(drive::releaseGoal)
                    .build();
 
            init();
 
-           drive.grabGoal();
 
            waitForStart();
 
            if(isStopRequested()) return;
-
+           drive.grabGoal();
            drive.followTrajectory(targetZoneA);
-            drive.releaseGoal();//Deploy Wobble Goal by setting servo to open
-           sleep(500);
-              //Deploy Arm
+           drive.arm(.5);
+           sleep(1000);
+           drive.stopArm();
            drive.followTrajectory(aToGoal);
-           drive.grabGoal();//Grab Goal by setting servo to close
            drive.followTrajectory(goalToA);
-           drive.releaseGoal();//Release Goal by setting servo to open
-              sleep(500);
+
 
        }
 }
