@@ -37,7 +37,6 @@ public class TeleOp6340 extends LinearOpMode {
 
             if (gamepad1.dpad_up)
                 drive.arm(-.5);
-
             else if (gamepad1.dpad_down)
                  drive.arm(.5);
             else
@@ -47,6 +46,15 @@ public class TeleOp6340 extends LinearOpMode {
                 drive.grabGoal();
             if (gamepad1.left_bumper)
                 drive.releaseGoal();
+
+            if (gamepad1.right_trigger>.5)
+                drive.shootRings(.9);//.7 for mid goal
+
+            else if
+                (gamepad1.right_trigger<.5)
+                drive.shootRings(0);
+
+
 
             /*Pose2d poseEstimate = drive.getPoseEstimate();
             telemetry.addData("x", poseEstimate.getX());

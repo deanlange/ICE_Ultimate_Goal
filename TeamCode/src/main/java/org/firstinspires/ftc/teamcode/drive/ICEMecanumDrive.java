@@ -94,6 +94,8 @@ public class ICEMecanumDrive extends MecanumDrive {
 
     protected DcMotorEx leftFront, leftRear, rightRear, rightFront;
     protected DcMotorEx arm;
+    protected DcMotorEx shooter;
+    protected DcMotorEx intake;
     protected List<DcMotorEx> motors;
     protected BNO055IMU imu;
 
@@ -152,7 +154,10 @@ public class ICEMecanumDrive extends MecanumDrive {
         leftRear = hardwareMap.get(DcMotorEx.class, "leftRear");
         rightRear = hardwareMap.get(DcMotorEx.class, "rightRear");
         rightFront = hardwareMap.get(DcMotorEx.class, "rightFront");
-        arm = hardwareMap.get(DcMotorEx.class, "arm");
+        arm = hardwareMap.get(DcMotorEx.class, "frontEncoder");
+        shooter = hardwareMap.get(DcMotorEx.class, "shooter");
+        intake = hardwareMap.get(DcMotorEx.class, "rightEncoder");
+
 
 
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
@@ -176,6 +181,8 @@ public class ICEMecanumDrive extends MecanumDrive {
         // reverse any motors using DcMotor.setDirection()
         leftFront.setDirection(DcMotor.Direction.REVERSE);
         leftRear.setDirection(DcMotor.Direction.REVERSE);
+        shooter.setDirection(DcMotor.Direction.REVERSE);
+
 
         // Define and initialize ALL installed servos.
         leftServo  = hardwareMap.get(Servo.class, "leftServo");
@@ -396,9 +403,12 @@ public class ICEMecanumDrive extends MecanumDrive {
         armServo.setPosition(0);
 
  }
-    public void arm (double power){
-        arm.setPower(power);
+
+    public void shootRings(double power) {shooter.setPower(power);
     }
+    public void arm (double power){arm.setPower(power);
+    }
+
     public void deployArm(){
         arm.setPower(.5);
 
