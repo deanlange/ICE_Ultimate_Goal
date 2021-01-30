@@ -41,21 +41,21 @@ public class ShootingConsistencyTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         // Change my id
-        DcMotorEx myMotor = hardwareMap.get(DcMotorEx.class, "flywheelMotor");
-        myMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        myMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        DcMotorEx shooter = hardwareMap.get(DcMotorEx.class, "shooter");
+        shooter.setDirection(DcMotorSimple.Direction.REVERSE);
+        shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        MotorConfigurationType motorConfigurationType = myMotor.getMotorType().clone();
+        MotorConfigurationType motorConfigurationType = shooter.getMotorType().clone();
         motorConfigurationType.setAchieveableMaxRPMFraction(1.0);
-        myMotor.setMotorType(motorConfigurationType);
+        shooter.setMotorType(motorConfigurationType);
 
         if (RUN_USING_ENCODER)
-            myMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            shooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         else
-            myMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            shooter.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         batteryVoltageSensor = hardwareMap.voltageSensor.iterator().next();
-        setPIDFCoefficients(myMotor, MOTOR_VELO_PID);
+        setPIDFCoefficients(shooter, MOTOR_VELO_PID);
 
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
@@ -68,12 +68,12 @@ public class ShootingConsistencyTest extends LinearOpMode {
         if (isStopRequested()) return;
 
         while (!isStopRequested()) {
-            setVelocity(myMotor, TESTING_SPEED);
+            setVelocity(shooter, TESTING_SPEED);
 
-            printVelocity(myMotor, TESTING_SPEED);
+            printVelocity(shooter, TESTING_SPEED);
 
             if (lastKp != MOTOR_VELO_PID.p || lastKi != MOTOR_VELO_PID.i || lastKd != MOTOR_VELO_PID.d || lastKf != MOTOR_VELO_PID.f) {
-                setPIDFCoefficients(myMotor, MOTOR_VELO_PID);
+                setPIDFCoefficients(shooter, MOTOR_VELO_PID);
 
                 lastKp = MOTOR_VELO_PID.p;
                 lastKi = MOTOR_VELO_PID.i;

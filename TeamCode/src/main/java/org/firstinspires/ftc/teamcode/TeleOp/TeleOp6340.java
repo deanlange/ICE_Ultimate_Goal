@@ -1,10 +1,16 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
+import android.util.Log;
+
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.firstinspires.ftc.teamcode.drive.ICEMecanumDrive;
+
+import static org.firstinspires.ftc.teamcode.drive.ICEMecanumDrive.SHOOTER_PID;
 
 /**
  * This is a simple teleop routine for testing localization. Drive the robot around like a normal
@@ -21,7 +27,7 @@ public class TeleOp6340 extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         ICEMecanumDrive drive = new ICEMecanumDrive(hardwareMap);
 
-        drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        drive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         waitForStart();
 
@@ -48,22 +54,19 @@ public class TeleOp6340 extends LinearOpMode {
                 drive.releaseGoal();
 
             if (gamepad1.right_trigger>.5)
-                drive.shootRings(.9);//.7 for mid goal
-
+                drive.shootRings();
             else if
                 (gamepad1.right_trigger<.5)
-                drive.shootRings(0);
+                drive.shooter.setVelocity(0);
 
 
 
-            /*Pose2d poseEstimate = drive.getPoseEstimate();
-            telemetry.addData("x", poseEstimate.getX());
-            telemetry.addData("y", poseEstimate.getY());
-            telemetry.addData("heading", poseEstimate.getHeading());
+
+                telemetry.addData("targetVelocity", drive.shooter.getVelocity());
+
             telemetry.update();
 
 
-             */
         }
     }
 

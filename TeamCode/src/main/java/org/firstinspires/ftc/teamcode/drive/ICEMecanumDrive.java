@@ -54,6 +54,7 @@ import static org.firstinspires.ftc.teamcode.drive.ICEDriveConstants.encoderTick
 import static org.firstinspires.ftc.teamcode.drive.ICEDriveConstants.kA;
 import static org.firstinspires.ftc.teamcode.drive.ICEDriveConstants.kStatic;
 import static org.firstinspires.ftc.teamcode.drive.ICEDriveConstants.kV;
+import static org.firstinspires.ftc.teamcode.drive.ICEDriveConstants.rpmToVelocity;
 
 /*
  * Simple mecanum drive hardware implementation for REV hardware.
@@ -62,6 +63,7 @@ import static org.firstinspires.ftc.teamcode.drive.ICEDriveConstants.kV;
 public class ICEMecanumDrive extends MecanumDrive {
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(8, 0, 0);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(8, 0, 0);
+    public static PIDFCoefficients SHOOTER_PID = new PIDFCoefficients(30,0,2,15);
 
     public static double LATERAL_MULTIPLIER = 1;
 
@@ -94,7 +96,7 @@ public class ICEMecanumDrive extends MecanumDrive {
 
     protected DcMotorEx leftFront, leftRear, rightRear, rightFront;
     protected DcMotorEx arm;
-    protected DcMotorEx shooter;
+    public DcMotorEx shooter;
     protected DcMotorEx intake;
     protected List<DcMotorEx> motors;
     protected BNO055IMU imu;
@@ -171,6 +173,15 @@ public class ICEMecanumDrive extends MecanumDrive {
         if (RUN_USING_ENCODER) {
             setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
+
+        //Turn on RUN_USING_ENCODER
+        shooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        // Set PIDF Coefficients with voltage compensated feedforward value
+        shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(
+                SHOOTER_PID.p, SHOOTER_PID.i, SHOOTER_PID.d,
+                SHOOTER_PID.f * 12 / hardwareMap.voltageSensor.iterator().next().getVoltage()
+        ));
 
         setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
@@ -404,7 +415,8 @@ public class ICEMecanumDrive extends MecanumDrive {
 
  }
 
-    public void shootRings(double power) {shooter.setPower(power);
+    public void shootRings() {
+        shooter.setVelocity(2000);
     }
     public void arm (double power){arm.setPower(power);
     }
