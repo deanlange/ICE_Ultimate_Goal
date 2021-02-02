@@ -1,16 +1,10 @@
-package org.firstinspires.ftc.teamcode.TeleOp;
-
-import android.util.Log;
+package org.firstinspires.ftc.teamcode.drive.TeleOp;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.firstinspires.ftc.teamcode.drive.ICEMecanumDrive;
-
-import static org.firstinspires.ftc.teamcode.drive.ICEMecanumDrive.SHOOTER_PID;
 
 /**
  * This is a simple teleop routine for testing localization. Drive the robot around like a normal
