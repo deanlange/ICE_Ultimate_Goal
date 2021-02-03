@@ -104,9 +104,9 @@ public class ICEMecanumDrive extends MecanumDrive {
     private LinkedList<Pose2d> poseHistory;
 
     protected DcMotorEx leftFront, leftRear, rightRear, rightFront;
-    protected DcMotorEx arm;
+    public DcMotorEx arm;
     public DcMotorEx shooter;
-    protected DcMotorEx intake;
+    public DcMotorEx intake;
     protected List<DcMotorEx> motors;
     protected BNO055IMU imu;
 
@@ -435,8 +435,14 @@ public class ICEMecanumDrive extends MecanumDrive {
  }
 
     public void shootRings() {
-        shooter.setVelocity(2000);
+        shooter.setVelocity(1500);
     }
+    //reverse shooter motor
+    //start shooter motor
+    //if shoot motor is > 1475
+    //start intake
+    //else stop intake
+    //
     public void arm (double power){arm.setPower(power);
     }
 
@@ -449,6 +455,14 @@ public class ICEMecanumDrive extends MecanumDrive {
     }
     public void stopArm(){
         arm(0);
+    }
+
+    public void intakeRings() {
+        intake.setPower(1);
+    }
+
+    public void outakeRings(){
+        intake.setPower(-1);
     }
 
     @NonNull
