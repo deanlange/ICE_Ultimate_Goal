@@ -27,16 +27,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.drive;
+package org.firstinspires.ftc.teamcode.drive.Autonomous;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.teamcode.drive.ICEMecanumDrive;
 
 import java.util.List;
 
@@ -50,11 +55,13 @@ import java.util.List;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@TeleOp(name = "Concept: ICETensorFlow Object Detection Webcam", group = "Concept")
-public class ICETensorFlowObjectDetectionWebcam extends LinearOpMode {
-    private static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
-    private static final String LABEL_FIRST_ELEMENT = "Quad";
-    private static final String LABEL_SECOND_ELEMENT = "Single";
+@Autonomous(name = "LangeBlueAuto", group = "Autonomous")
+public class LangeBlueAuto extends LinearOpMode {
+    public static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
+    public static final String LABEL_FIRST_ELEMENT = "Quad";
+    public static final String LABEL_SECOND_ELEMENT = "Single";
+    private String targetZone = "A";
+
 
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
@@ -103,58 +110,160 @@ public class ICETensorFlowObjectDetectionWebcam extends LinearOpMode {
             // to artificially zoom in to the center of image.  For best results, the "aspectRatio" argument
             // should be set to the value of the images used to create the TensorFlow Object Detection model
             // (typically 16/9).
-            tfod.setZoom(2.5, 16.0/9.0);
+            tfod.setZoom(2.5, 16.0 / 9.0);
         }
 
         /** Wait for the game to begin */
+        ICEMecanumDrive drive = new ICEMecanumDrive(hardwareMap);
+
+        Pose2d startPose = new Pose2d(-62, 55, Math.toRadians(0));
+
+        drive.setPoseEstimate(startPose);
+
+        Trajectory targetZoneA = drive.trajectoryBuilder(startPose)
+                .splineTo(new Vector2d(10, 55), Math.toRadians(0))
+                .addDisplacementMarker(drive::releaseGoal)
+                .build();
+
+        Trajectory aToGoal = drive.trajectoryBuilder(targetZoneA.end(), true)
+                .splineTo(new Vector2d(-30, 29), Math.toRadians(180))
+                .addDisplacementMarker(drive::grabGoal)
+                .build();
+
+        Trajectory goalToA = drive.trajectoryBuilder(aToGoal.end())
+                .splineTo(new Vector2d(10, 50), Math.toRadians(270))
+                .addDisplacementMarker(drive::releaseGoal)
+                .build();
+
+        Trajectory targetZoneB = drive.trajectoryBuilder(startPose)
+                .splineTo(new Vector2d(-45.0, 55.0), Math.toRadians(0))
+                .splineTo(new Vector2d(34.0, 30.0), Math.toRadians(0))
+                .addDisplacementMarker(drive::releaseGoal)
+                .build();
+
+        Trajectory bToGoal = drive.trajectoryBuilder(targetZoneB.end(), true)
+                .splineTo(new Vector2d(-30, 29), Math.toRadians(180))
+                .addDisplacementMarker(drive::grabGoal)
+                .build();
+
+        Trajectory goalToB = drive.trajectoryBuilder(bToGoal.end())
+                .splineTo(new Vector2d(40, 15), Math.toRadians(270))
+                .addDisplacementMarker(drive::releaseGoal)
+                .build();
+
+        Trajectory bToLine = drive.trajectoryBuilder(goalToB.end())
+                .splineTo(new Vector2d(10, 15), Math.toRadians(180))
+                .build();
+
+        Trajectory targetZoneC = drive.trajectoryBuilder(startPose)
+                .splineTo(new Vector2d(58, 55), Math.toRadians(0))
+                .addDisplacementMarker(drive::releaseGoal)
+                .build();
+
+        Trajectory cToGoal = drive.trajectoryBuilder(targetZoneC.end(), true)
+                .splineTo(new Vector2d(-30, 29), Math.toRadians(180))
+                .addDisplacementMarker(drive::grabGoal)
+                .build();
+
+        Trajectory goalToC = drive.trajectoryBuilder(cToGoal.end())
+                .splineTo(new Vector2d(58, 45), Math.toRadians(270))
+                .addDisplacementMarker(drive::releaseGoal)
+                .build();
+
+        Trajectory cToLine = drive.trajectoryBuilder(goalToC.end())
+                .splineTo(new Vector2d(10, 50), Math.toRadians(180))
+                .build();
+
+/** Wait for the game to begin */
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
         waitForStart();
 
         if (opModeIsActive()) {
-            while (opModeIsActive()) {
-                if (tfod != null) {
+            ElapsedTime timeout = new ElapsedTime();
+            while (timeout.time() < 5.0) {
+                if (tfod != null) ;
+                {
                     // getUpdatedRecognitions() will return null if no new information is available since
                     // the last time that call was made.
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                     if (updatedRecognitions != null) {
                         telemetry.addData("# Object Detected", updatedRecognitions.size());
-                        if (updatedRecognitions.size() == 0 ) {
-                            // empty list.  no objects recognized.
-                            telemetry.addData("TFOD", "No items detected.");
-                            telemetry.addData("Target Zone", "A");
-                        } else {
-                            // list is not empty.
-                            // step through the list of recognitions and display boundary info.
-                            int i = 0;
-                            for (Recognition recognition : updatedRecognitions) {
-                                telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
-                                telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
-                                        recognition.getLeft(), recognition.getTop());
-                                telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
-                                        recognition.getRight(), recognition.getBottom());
 
-                                // check label to see which target zone to go after.
-                                if (recognition.getLabel().equals("Single")) {
-                                    telemetry.addData("Target Zone", "B");
-                                } else if (recognition.getLabel().equals("Quad")) {
-                                    telemetry.addData("Target Zone", "C");
-                                } else {
-                                    telemetry.addData("Target Zone", "UNKNOWN");
-                                }
+                        // step through the list of recognitions and display boundary info.
+                        int i = 0;
+                        for (Recognition recognition : updatedRecognitions) {
+                            telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
+                            telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
+                                    recognition.getLeft(), recognition.getTop());
+                            telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
+                                    recognition.getRight(), recognition.getBottom());
+
+                            // check label to see which target zone to go after.
+                            if (recognition.getLabel().equals("Single")) {
+                                telemetry.addData("Target Zone", "B");
+                                targetZone = "B";
+                            } else if (recognition.getLabel().equals("Quad")) {
+                                telemetry.addData("Target Zone", "C");
+                                targetZone = "C";
+                            } else {
+                                targetZone = "A";
                             }
+
                         }
 
-                        telemetry.update();
                     }
                 }
+                telemetry.update();
+
+
+            }
+
+            if (tfod != null) {
+                tfod.shutdown();
+            }
+
+//Autonomous Stuff Goes Here
+
+                if (targetZone.equals("C")) {
+                    drive.grabGoal();
+                    drive.followTrajectory(targetZoneC);
+                    drive.releaseGoal();//Deploy Wobble Goal by setting servo to open
+                    drive.arm(.5);
+                    sleep(1000);
+                    drive.stopArm();
+                    drive.followTrajectory(cToGoal);
+                    drive.grabGoal();//Grab Goal by setting servo to close
+                    drive.followTrajectory(goalToC);
+                    drive.releaseGoal();//Release Goal by setting servo to open
+                    sleep(500);
+                    drive.followTrajectory(cToLine);
+                } else if (targetZone.equals("B")) {
+                    drive.grabGoal();
+                    drive.followTrajectory(targetZoneB);
+                    drive.releaseGoal();//Deploy Wobble Goal by setting servo to open
+                    drive.arm(.5);
+                    sleep(1000);
+                    drive.stopArm();
+                    drive.followTrajectory(bToGoal);
+                    drive.grabGoal();//Grab Goal by setting servo to close
+                    drive.followTrajectory(goalToB);
+                    drive.releaseGoal();
+                    sleep(500);//Release Goal by setting servo to open
+                    drive.followTrajectory(bToLine);
+                } else if (targetZone.equals("A")); {
+                    drive.grabGoal();
+                    drive.followTrajectory(targetZoneA);
+                    drive.arm(.5);
+                    sleep(1000);
+                    drive.stopArm();
+                    drive.followTrajectory(aToGoal);
+                    drive.followTrajectory(goalToA);
+                }
+
             }
         }
 
-        if (tfod != null) {
-            tfod.shutdown();
-        }
-    }
 
     /**
      * Initialize the Vuforia localization engine.

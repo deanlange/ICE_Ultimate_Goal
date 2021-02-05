@@ -53,11 +53,15 @@ public class TeleOp6340 extends LinearOpMode {
                 (gamepad1.right_trigger<.5)
                 drive.shooter.setVelocity(0);
 
-            if (gamepad1.x)
+            if (gamepad1.x) {
                 drive.intakeRings();
-            if (gamepad1.y)
+            } else if (gamepad1.y) {
                 drive.outakeRings();
-            else drive.intake.setPower(0);
+            } else{
+                drive.intake.setPower(0);
+                drive.intakeServo.setPower(0);
+            }
+
 
 
 
